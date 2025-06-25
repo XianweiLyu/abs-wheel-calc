@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>ABS 脉冲比计算器</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; background: #f7f7f7; }
+    label { display: block; margin-top: 10px; }
+    input { width: 150px; padding: 5px; margin-left: 5px; }
+    button { margin-top: 20px; padding: 10px 20px; }
+    .output { margin-top: 20px; padding: 10px; background: #fff; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <h2>ABS 脉冲比匹配计算器</h2>
+
+  <label>原始前轮胎规格：<input id="origFront" placeholder="如 80/90-12"></label>
+  <label>原始后轮胎规格：<input id="origRear" placeholder="如 3.00-10"></label>
+  <label>原始前尺圈齿数：<input id="origFrontTeeth" type="number" value="50"></label>
+  <label>原始后尺圈齿数：<input id="origRearTeeth" type="number" value="48"></label>
+
+  <hr>
+
+  <label>新前轮胎规格：<input id="newFront" placeholder="如 110/70-12"></label>
+  <label>新后轮胎规格：<input id="newRear" placeholder="如 120/70-12"></label>
+  <label>新前尺圈齿数：<input id="newFrontTeeth" type="number" value="50"></label>
+
+  <button onclick="calculate()">计算建议后尺圈齿数</button>
+
+  <div class="output" id="result"></div>
+
+  <script>
+    function parseTire(tireStr) {
+      tireStr = tireStr.trim();
+      if (/\d+\/\d+-\d+/.test(tireStr)) {
+        const [w, h, r] = tireStr.match(/\d+/g).map(Number);
+        const height = w * (h / 100);
+        const rim = r * 25.4;
+        return 2 * height + rim;
+      } else if (/\d+\.\d+-\d+/.test(tireStr)) {
+        const [wInch, r] = tireStr.match(/\d+(?:\.\d+)?/g).map(Number);
+        const w = wInch * 25.4;
+        const height = w;
+        const rim = r * 25.4;
+        return 2 * height + rim;
+      }
+      return null;
+    }
+
+    function calculate() {
+      const of = parseTire(document.getElementById('origFront').value);
+      const or = parseTire(document.getElementById('origRear').value);
+      const nf = parseTire(document.getElementById('newFront').value);
+      const nr = parseTire(document.getElementById('newRear').value);
+      const oft = Number(document.getElementById('origFrontTeeth').value);
+      const ort = Number(document.getElementById('origRearTeeth').value);
+      const nft = Number(document.getElementById('newFrontTeeth').value);
+
+      if (!of || !or || !nf || !nr) {
+        document.getElementById('result').innerText = '❌ 请检查轮胎规格格式，如 110/70-12 或 3.00-10';
+        return;
+      }
+
+      const origRatio = (oft / of) / (ort / or);
+      const x = (nft / nf) / origRatio * nr;
+      const rec = [Math.floor(x), Math.round(x), Math.ceil(x)].map(teeth => {
+        const newRatio = (nft / nf) / (teeth / nr);
+        const err = ((newRatio - origRatio) / origRatio * 100).toFixed(2);
+        return `${teeth} 齿 → 误差 ${err}%`;
+      }).join('<br>');
+
+      document.getElementById('result').innerHTML = `✅ 建议后尺圈齿数约为：<b>${x.toFixed(2)}</b><br><br>推荐齿数及对应误差：<br>${rec}`;
+    }
+  </script>
+</body>
+</html>
