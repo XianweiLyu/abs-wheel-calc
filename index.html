@@ -107,7 +107,8 @@
 
       const origRatio = (oft / of) / (ort / or);
       const x = (nft / nf) / origRatio * nr;
-      const rec = [Math.floor(x), Math.round(x), Math.ceil(x)].map(teeth => {
+      const base = Math.round(x);
+      const rec = [base - 1, base, base + 1].map(teeth => {
         const newRatio = (nft / nf) / (teeth / nr);
         const err = ((newRatio - origRatio) / origRatio * 100).toFixed(2);
         return `${teeth} 齿 → 误差 ${err}%`;
