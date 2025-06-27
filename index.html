@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
   <title>ABS 尺圈匹配计算器</title>
   <style>
     body {
@@ -26,7 +26,7 @@
       margin-top: 4vw;
       font-size: 4vw;
     }
-    select, input[type="text"], input[type="number"] {
+    input, select {
       width: 100%;
       padding: 3vw;
       margin-top: 1vw;
@@ -53,128 +53,51 @@
       font-size: 4vw;
       line-height: 1.5;
     }
-    .custom-input {
-      margin-top: 1vw;
-      display: none;
-    }
   </style>
 </head>
 <body>
   <div class="container">
     <h2>ABS 尺圈匹配计算器</h2>
 
-    <label for="origFrontSelect">原始前轮胎规格：</label>
-    <select id="origFrontSelect" onchange="toggleCustomInput('origFrontSelect', 'origFrontCustom')">
-      <option value="">请选择或自定义</option>
-      <option value="80/90-12">80/90-12</option>
-      <option value="90/90-10">90/90-10</option>
-      <option value="90/90-12">90/90-12</option>
-      <option value="100/90-10">100/90-10</option>
-      <option value="100/90-12">100/90-12</option>
-      <option value="90/80-12">90/80-12</option>
-      <option value="100/80-12">100/80-12</option>
-      <option value="120/80-12">120/80-12</option>
-      <option value="110/70-12">110/70-12</option>
-      <option value="120/70-12">120/70-12</option>
-      <option value="130/70-12">130/70-12</option>
-      <option value="3.00-10">3.00-10</option>
-      <option value="3.50-10">3.50-10</option>
-      <option value="custom">自定义</option>
-    </select>
-    <input type="text" id="origFrontCustom" class="custom-input" placeholder="请输入自定义轮胎规格，如 115/75-12" />
+    <label>原始前轮胎规格：
+      <input id="origFront" list="tireOptions" placeholder="如 80/90-12">
+    </label>
+    <label>原始后轮胎规格：
+      <input id="origRear" list="tireOptions" placeholder="如 3.00-10">
+    </label>
+    <label>原始前尺圈齿数：<input id="origFrontTeeth" type="number" value="50"></label>
+    <label>原始后尺圈齿数：<input id="origRearTeeth" type="number" value="48"></label>
 
-    <label for="origRearSelect">原始后轮胎规格：</label>
-    <select id="origRearSelect" onchange="toggleCustomInput('origRearSelect', 'origRearCustom')">
-      <option value="">请选择或自定义</option>
-      <option value="80/90-12">80/90-12</option>
-      <option value="90/90-10">90/90-10</option>
-      <option value="90/90-12">90/90-12</option>
-      <option value="100/90-10">100/90-10</option>
-      <option value="100/90-12">100/90-12</option>
-      <option value="90/80-12">90/80-12</option>
-      <option value="100/80-12">100/80-12</option>
-      <option value="120/80-12">120/80-12</option>
-      <option value="110/70-12">110/70-12</option>
-      <option value="120/70-12">120/70-12</option>
-      <option value="130/70-12">130/70-12</option>
-      <option value="3.00-10">3.00-10</option>
-      <option value="3.50-10">3.50-10</option>
-      <option value="custom">自定义</option>
-    </select>
-    <input type="text" id="origRearCustom" class="custom-input" placeholder="请输入自定义轮胎规格，如 115/75-12" />
-
-    <label>原始前尺圈齿数：<input id="origFrontTeeth" type="number" value="50" /></label>
-    <label>原始后尺圈齿数：<input id="origRearTeeth" type="number" value="48" /></label>
-
-    <label for="newFrontSelect">新前轮胎规格：</label>
-    <select id="newFrontSelect" onchange="toggleCustomInput('newFrontSelect', 'newFrontCustom')">
-      <option value="">请选择或自定义</option>
-      <option value="80/90-12">80/90-12</option>
-      <option value="90/90-10">90/90-10</option>
-      <option value="90/90-12">90/90-12</option>
-      <option value="100/90-10">100/90-10</option>
-      <option value="100/90-12">100/90-12</option>
-      <option value="90/80-12">90/80-12</option>
-      <option value="100/80-12">100/80-12</option>
-      <option value="120/80-12">120/80-12</option>
-      <option value="110/70-12">110/70-12</option>
-      <option value="120/70-12">120/70-12</option>
-      <option value="130/70-12">130/70-12</option>
-      <option value="3.00-10">3.00-10</option>
-      <option value="3.50-10">3.50-10</option>
-      <option value="custom">自定义</option>
-    </select>
-    <input type="text" id="newFrontCustom" class="custom-input" placeholder="请输入自定义轮胎规格，如 115/75-12" />
-
-    <label for="newRearSelect">新后轮胎规格：</label>
-    <select id="newRearSelect" onchange="toggleCustomInput('newRearSelect', 'newRearCustom')">
-      <option value="">请选择或自定义</option>
-      <option value="80/90-12">80/90-12</option>
-      <option value="90/90-10">90/90-10</option>
-      <option value="90/90-12">90/90-12</option>
-      <option value="100/90-10">100/90-10</option>
-      <option value="100/90-12">100/90-12</option>
-      <option value="90/80-12">90/80-12</option>
-      <option value="100/80-12">100/80-12</option>
-      <option value="120/80-12">120/80-12</option>
-      <option value="110/70-12">110/70-12</option>
-      <option value="120/70-12">120/70-12</option>
-      <option value="130/70-12">130/70-12</option>
-      <option value="3.00-10">3.00-10</option>
-      <option value="3.50-10">3.50-10</option>
-      <option value="custom">自定义</option>
-    </select>
-    <input type="text" id="newRearCustom" class="custom-input" placeholder="请输入自定义轮胎规格，如 115/75-12" />
-
-    <label>新前尺圈齿数：<input id="newFrontTeeth" type="number" value="50" /></label>
+    <label>新前轮胎规格：
+      <input id="newFront" list="tireOptions" placeholder="如 110/70-12">
+    </label>
+    <label>新后轮胎规格：
+      <input id="newRear" list="tireOptions" placeholder="如 120/70-12">
+    </label>
+    <label>新前尺圈齿数：<input id="newFrontTeeth" type="number" value="50"></label>
 
     <button onclick="calculate()">计算建议后尺圈齿数</button>
 
     <div class="output" id="result"></div>
+
+    <datalist id="tireOptions">
+      <option value="80/90-12">
+      <option value="90/90-10">
+      <option value="90/90-12">
+      <option value="100/90-10">
+      <option value="100/90-12">
+      <option value="90/80-12">
+      <option value="100/80-12">
+      <option value="120/80-12">
+      <option value="110/70-12">
+      <option value="120/70-12">
+      <option value="130/70-12">
+      <option value="3.00-10">
+      <option value="3.50-10">
+    </datalist>
   </div>
 
   <script>
-    function toggleCustomInput(selectId, inputId) {
-      const select = document.getElementById(selectId);
-      const input = document.getElementById(inputId);
-      if (select.value === 'custom') {
-        input.style.display = 'block';
-      } else {
-        input.style.display = 'none';
-        input.value = '';
-      }
-    }
-
-    function getTireValue(selectId, inputId) {
-      const select = document.getElementById(selectId);
-      const input = document.getElementById(inputId);
-      if (select.value === 'custom') {
-        return input.value.trim();
-      } else {
-        return select.value;
-      }
-    }
-
     function parseTire(tireStr) {
       tireStr = tireStr.trim();
       if (/\d+\/\d+-\d+/.test(tireStr)) {
@@ -193,10 +116,10 @@
     }
 
     function calculate() {
-      const of = parseTire(getTireValue('origFrontSelect', 'origFrontCustom'));
-      const or = parseTire(getTireValue('origRearSelect', 'origRearCustom'));
-      const nf = parseTire(getTireValue('newFrontSelect', 'newFrontCustom'));
-      const nr = parseTire(getTireValue('newRearSelect', 'newRearCustom'));
+      const of = parseTire(document.getElementById('origFront').value);
+      const or = parseTire(document.getElementById('origRear').value);
+      const nf = parseTire(document.getElementById('newFront').value);
+      const nr = parseTire(document.getElementById('newRear').value);
       const oft = Number(document.getElementById('origFrontTeeth').value);
       const ort = Number(document.getElementById('origRearTeeth').value);
       const nft = Number(document.getElementById('newFrontTeeth').value);
