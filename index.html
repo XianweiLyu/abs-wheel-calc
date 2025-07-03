@@ -102,17 +102,28 @@
       tireStr = tireStr.trim();
       if (/\d+\/\d+-\d+/.test(tireStr)) {
         const [w, h, r] = tireStr.match(/\d+/g).map(Number);
-        const height = w * (h / 100);
+        const width = w;
+        const aspect = h / 100;
+        const sidewall = width * aspect;
         const rim = r * 25.4;
-        return 2 * height + rim;
+        const radius = sidewall + rim / 2;
+        const diameter = 2 * sidewall + rim;
+        return { width, sidewall, rim, radius, diameter };
       } else if (/\d+\.\d+-\d+/.test(tireStr)) {
         const [wInch, r] = tireStr.match(/\d+(?:\.\d+)?/g).map(Number);
-        const w = wInch * 25.4;
-        const height = w;
+        const width = wInch * 25.4;
+        const sidewall = width;
         const rim = r * 25.4;
-        return 2 * height + rim;
+        const radius = sidewall + rim / 2;
+        const diameter = 2 * sidewall + rim;
+        return { width, sidewall, rim, radius, diameter };
       }
       return null;
+    }
+
+    function displayTireInfo(name, data) {
+      if (!data) return '';
+      return `${name}：\n宽度 ${data.width.toFixed(1)} mm，厚度 ${data.sidewall.toFixed(1)} mm，轮辋 ${data.rim.toFixed(1)} mm\n半径 ${data.radius.toFixed(1)} mm，周长 ${(Math.PI * data.diameter).toFixed(1)} mm\n`;
     }
 
     function calculate() {
@@ -129,16 +140,23 @@
         return;
       }
 
-      const origRatio = (oft / of) / (ort / or);
-      const x = (nft / nf) / origRatio * nr;
+      const origRatio = (oft / of.diameter) / (ort / or.diameter);
+      const x = (nft / nf.diameter) / origRatio * nr.diameter;
       const base = Math.round(x);
       const rec = [base - 1, base, base + 1].map(teeth => {
-        const newRatio = (nft / nf) / (teeth / nr);
+        const newRatio = (nft / nf.diameter) / (teeth / nr.diameter);
         const err = ((newRatio - origRatio) / origRatio * 100).toFixed(2);
         return `${teeth} 齿 → 误差 ${err}%`;
       }).join('\n');
 
-      document.getElementById('result').innerHTML = `✅ 建议后尺圈齿数约为：<b>${x.toFixed(2)}</b><br><br>推荐齿数及对应误差：<br>${rec.replace(/\n/g, '<br>')}`;
+      const tireInfo = [
+        displayTireInfo('原始前轮', of),
+        displayTireInfo('原始后轮', or),
+        displayTireInfo('新前轮', nf),
+        displayTireInfo('新后轮', nr)
+      ].join('\n');
+
+      document.getElementById('result').innerHTML = `✅ 建议后尺圈齿数约为：<b>${x.toFixed(2)}</b><br><br>推荐齿数及对应误差：<br>${rec.replace(/\n/g, '<br>')}<br><br>轮胎尺寸信息：<br>${tireInfo.replace(/\n/g, '<br>')}`;
     }
   </script>
 </body>
