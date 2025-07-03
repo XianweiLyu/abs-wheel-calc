@@ -156,7 +156,9 @@
         displayTireInfo('新后轮', nr)
       ].join('\n');
 
-      document.getElementById('result').innerHTML = `✅ 建议后尺圈齿数约为：<b>${x.toFixed(2)}</b><br><br>推荐齿数及对应误差：<br>${rec.replace(/\n/g, '<br>')}<br><br>轮胎尺寸信息：<br>${tireInfo.replace(/\n/g, '<br>')}`;
+      const heightDelta = (nr.radius - nf.radius) - (or.radius - of.radius);
+
+      document.getElementById('result').innerHTML = `✅ 建议后尺圈齿数约为：<b>${x.toFixed(2)}</b><br><br>推荐齿数及对应误差：<br>${rec.replace(/\n/g, '<br>')}<br><br>轮胎尺寸信息：<br>${tireInfo.replace(/\n/g, '<br>')}<br><br>🚲 新轮胎装上后，车头相对车尾高度变化：<b>${heightDelta.toFixed(1)} mm</b>`;
     }
   </script>
 </body>
